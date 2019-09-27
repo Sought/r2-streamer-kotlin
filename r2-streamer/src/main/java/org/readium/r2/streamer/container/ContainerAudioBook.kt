@@ -13,6 +13,7 @@ import org.readium.r2.shared.RootFile
 import org.readium.r2.shared.drm.DRM
 import org.readium.r2.streamer.parser.AudioBookParser
 import java.io.File
+import java.util.zip.ZipFile
 
 class ContainerAudioBook : AudioBookContainer, DirectoryContainer {
 
@@ -28,4 +29,8 @@ class ContainerAudioBook : AudioBookContainer, DirectoryContainer {
         rootFile = RootFile(rootPath = path, mimetype = AudioBookParser.mimetypeAudiobook)
     }
 
+    override fun data(relativePath: String): ByteArray {
+        val zip = ZipFile(File(rootFile.rootPath))
+        return zip.getInputStream(zip.getEntry(relativePath)).readBytes()
+    }
 }
