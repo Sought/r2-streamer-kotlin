@@ -9,6 +9,7 @@
 
 package org.readium.r2.streamer.parser
 
+import android.os.Build
 import org.json.JSONObject
 import org.readium.r2.shared.parsePublication
 import org.readium.r2.streamer.container.ContainerAudioBook
@@ -76,7 +77,8 @@ class AudioBookParser : PublicationParser {
 
         //Modifying path of links
         for ((index, link) in publication.readingOrder.withIndex()) {
-            val uri: String = if (URI(link.href).isAbsolute) {
+            val uri: String = if (URI(link.href).isAbsolute
+            || Build.VERSION.SDK_INT >= 23) {
                 link.href!!
             } else {
                 fileAtPath + "/" + link.href
